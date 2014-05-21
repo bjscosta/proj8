@@ -79,6 +79,8 @@
 
         </h:form>
 
+
+
         <div align="center">
             <canvas id="myCanvas" width="600" height="300" style="background-color: white; border:5px solid #000000;"></canvas>
         </div>
@@ -87,18 +89,19 @@
         <form name="inputForm">
 
             <div align="center">
-                <table>
+                <table cellspacing="5" width="60%">
 
                     <tr>
-                        <th>Color</th>
+                        <th>Color:</th>
                         <td><input type="radio" name="color" value="#FF0000" checked="true"/>Red</td>
                         <td><input type="radio" name="color" value="#0000FF"/>Blue</td>
                         <td><input type="radio" name="color" value="#FF9900"/>Orange</td>
                         <td><input type="radio" name="color" value="#33CC33"/>Green</td>
                     </tr>
 
+                    <br/>
                     <tr>
-                        <th>Shape</th>
+                        <th>Shape:</th>
                         <td><input type="radio" name="shape" value="square" checked="true"/>Square</td>
                         <td><input type="radio" name="shape" value="circle"/>Circle</td>
 
@@ -107,16 +110,22 @@
                         <td> </td>
                     </tr>
 
-                    <tr>
-                        <th> </th>
-                        <td><input type="submit" value="Save" onclick="defineImageBinary();
-                                return false;"/></td>
-
-                        <td> </td>
-                        <td> </td>
-                    </tr>
 
                 </table>
+
+
+
+            </div>
+
+            <div align="center">
+
+                <input type="submit" value="Save" onclick="defineImageBinary();
+                        return false;"/>
+
+
+                <input type="submit" value="Reset" onclick="clearCanvas();
+                        return false;"/>
+
 
             </div>
 

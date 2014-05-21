@@ -1,38 +1,53 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
-    <h:body>
+    <h:body style="background-color: lightgray">
         <h:form>
 
-            <h:link outcome="/index" value="Home" />
+            <table border="0" cellspacing="10" width="100%">
 
-            &nbsp;&nbsp;&nbsp;&nbsp;
+                <tbody>
+                    <tr>
+                        <td width="10%" align="left">
+                            <h:link style="color: black" outcome="/index" value="Back" />
+                        </td>
+                        <td width="20%" align="left">
+                            <h:link style="color: black" outcome="editWhiteboard" value="Edit Whiteboard" />
+                        </td>
+                        <td width="25%" align="left">
+                            <h:link style="color: black" outcome="whiteboardList" value="See My Saved Whiteboards" />
+                        </td>
+                        <td width="25%" align="right">
+                            <h:outputLabel style="color: black" rendered="#{userController.logged}" value="Welcome: #{userController.userName()}"/>
 
-            <h:link outcome="editWhiteboard" value="Edit Whiteboard" />
+                        </td>
+                        <td width="20%" align="right">
 
-            &nbsp;&nbsp;&nbsp;&nbsp;
-
-            <h:link outcome="whiteboardList" value="See My Saved Whiteboards" />
-
-            &nbsp;&nbsp;&nbsp;&nbsp;
-
-            <h:commandLink action="#{logoutBean.logout()}" value="Logout" />
-
-
+                            <h:commandLink style="color: black" rendered="#{userController.logged}" action="#{logoutBean.logout()}" value="Logout" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
 
             <br/>
             <br/>
 
             <div align="center">
-                <h1><h:outputLabel value="Welcome: #{userController.userName()}"/></h1>
+                <h1>My Witeboard List</h1>
             </div>
 
         </h:form>
+
+        <p:dataTable>
+
+
+        </p:dataTable>
 
         <br/>
         <br/>

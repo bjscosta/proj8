@@ -44,7 +44,15 @@ public class MyWhiteboard {
 
     @OnMessage
     public void broadcastSnapshot(ByteBuffer data, Session session) throws IOException {
+        
         bb = data;
+        
+        for (Session peer : peers) {
+            if (!peer.equals(session)) {
+                peer.getBasicRemote().sendBinary(data);
+            }
+
+        }
         
     }
 
@@ -52,6 +60,7 @@ public class MyWhiteboard {
     public void onOpen(Session peer) throws IOException {
 
         peers.add(peer);
+        
         peer.getBasicRemote().sendBinary(bb);
         
 

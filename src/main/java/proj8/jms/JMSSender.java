@@ -20,6 +20,8 @@ import javax.jms.Topic;
 @Stateless
 public class JMSSender {
     
+
+    
     @Resource (lookup = "jms/connFactory")
     private ConnectionFactory connectionFactory;
     
@@ -33,7 +35,7 @@ public class JMSSender {
         
        
         try (JMSContext context = connectionFactory.createContext();) {
-            System.out.println("foi enviada");
+            
             context.createProducer().send(topic, bytes);
 
             

@@ -85,6 +85,16 @@ public class MyWhiteboard {
         peers.remove(peer);
 
     }
+    
+    public void sendImage(ByteBuffer data) throws IOException{
+        
+        for (Session peer : peers) {
+            
+                peer.getBasicRemote().sendBinary(data);
+
+        }
+        
+    }
 
     
 

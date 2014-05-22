@@ -58,15 +58,12 @@
                             <td align="left">
                                 Users Editing:
                             </td>
-                            <td align="left">
-                                <h:commandButton value="Edit"/>
-                            </td>
 
                             <td align="right" >
                                 Users Aborting:
                             </td>
                             <td align="right">
-                                <h:commandButton value="Abort"/>
+                                <input type="checkbox" id="instant" value="Online" checked="false">Abort
                             </td>
                         </tr>
                     </tbody>
@@ -122,9 +119,6 @@
                 <input type="submit" value="Save" onclick="defineImageBinary();
                         return false;"/>
 
-
-                <input type="submit" value="Reset" onclick="clearCanvas();
-                        return false;"/>
 
 
             </div>

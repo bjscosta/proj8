@@ -18,7 +18,7 @@ import javax.jms.Topic;
  * @author brunocosta
  */
 @Stateless
-public class JMSSender {
+public class ImageSender {
     
 
     

@@ -12,6 +12,7 @@ if(document.location.protocol === "https:"){
 else{
     wsUri = "ws://"+ document.location.host + "/projeto8/whiteboardendpoint";
 }
+
 var websocket = new WebSocket(wsUri);
 
 websocket.onerror = function(evt) { onError(evt) };
@@ -31,8 +32,24 @@ function onMessage(evt) {
     console.log("received: " + evt.data);
     
     if (typeof evt.data === "string") {
+        
+        var json = JSON.parse(evt.data);
+        
+        
+        if (json.hasOwnProperty('editing')) {
+            showEditing(json.editing);
+            
+        }
+        
+        else if(json.hasOwnProperty('aborting')){
+            showAborting(json.aborting);
+        }
+
+        else{
         drawImageText(evt.data);
-    } else {
+        }
+    } 
+    else {
         drawImageBinary(evt.data);
     }
 }

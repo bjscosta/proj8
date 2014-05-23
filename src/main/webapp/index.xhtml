@@ -14,7 +14,7 @@
                 <tbody>
                     <tr>
                         <td width="10%" align="left">
-                            <h:link style="color: black" rendered="#{!userController.logged}" outcome="login" value="Login" />
+                            <h:link style="color: black" rendered="#{!userController.seeIfLogged()}" outcome="login" value="Login" />
                         </td>
                         <td width="20%" align="left">
                             <h:link style="color: black" outcome="user/editWhiteboard" value="Edit Whiteboard" />
@@ -23,12 +23,12 @@
                             <h:link style="color: black" outcome="user/whiteboardList" value="See My Saved Whiteboards" />
                         </td>
                         <td width="25%" align="right">
-                            <h:outputLabel rendered="#{userController.logged}" value="Welcome: #{userController.userName()}"/>
+                            <h:outputLabel rendered="#{userController.seeIfLogged()}" value="Welcome: #{userController.userName()}"/>
 
                         </td>
                         <td width="20%" align="right">
 
-                            <h:commandLink style="color: black" rendered="#{userController.logged}" action="#{logoutBean.logout()}" value="Logout" />
+                            <h:commandLink style="color: black" rendered="#{userController.seeIfLogged()}" action="#{logoutBean.logout()}" value="Logout" />
                         </td>
                     </tr>
                 </tbody>

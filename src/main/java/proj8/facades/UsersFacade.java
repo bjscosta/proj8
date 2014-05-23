@@ -24,11 +24,14 @@ public class UsersFacade extends AbstractFacade<Users> {
     
     @Resource
     private SessionContext ctx;
+    
+    
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
+    
 
     public UsersFacade() {
         super(Users.class);
@@ -41,6 +44,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         if(ctx.getCallerPrincipal()!=null){
             String name = ctx.getCallerPrincipal().getName();
             u = find(name);
+            
         }    
        
         return u;

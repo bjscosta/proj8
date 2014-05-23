@@ -99,3 +99,17 @@ function clearCanvas(){
     defineImageBinary();
     
 }
+
+function showEditing(message) {
+    var editing = document.getElementById("ed");
+    
+    editing.innerHTML = message;
+    
+}
+
+function showAborting(message) {
+    var aborting = document.getElementById("ab");
+    
+    aborting.innerHTML = message;
+    
+}

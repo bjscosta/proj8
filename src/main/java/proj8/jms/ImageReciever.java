@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import proj8.pojos.MyWhiteboard;
+import proj8.webSocket.MyWhiteboard;
 
 /**
  *
@@ -27,12 +27,12 @@ import proj8.pojos.MyWhiteboard;
     @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/firstTopic"),
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "jms/firstTopic")
 })
-public class JMSReciever implements MessageListener {
+public class ImageReciever implements MessageListener {
     
     @Inject
     private MyWhiteboard mw;
     
-    public JMSReciever() {
+    public ImageReciever() {
     }
     
     @Override
@@ -51,7 +51,7 @@ public class JMSReciever implements MessageListener {
         } catch (JMSException ex) {
             Logger.getLogger(MyWhiteboard.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(JMSReciever.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImageReciever.class.getName()).log(Level.SEVERE, null, ex);
         }
             
        

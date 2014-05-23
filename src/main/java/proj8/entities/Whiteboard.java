@@ -7,6 +7,7 @@
 package proj8.entities;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -18,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -41,12 +41,15 @@ public class Whiteboard implements Serializable {
     @ManyToOne
     private Users user;
     
+    @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
+    
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "figure")
-    private String imagePath;
+    @Column(name = "figure", nullable = false)
+    private Blob image;
     
     
     @NotNull
@@ -69,13 +72,23 @@ public class Whiteboard implements Serializable {
         this.user = user;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public Blob getImage() {
+        return image;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(Blob image) {
+        this.image = image;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
 
     
 

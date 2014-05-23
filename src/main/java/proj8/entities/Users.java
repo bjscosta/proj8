@@ -42,7 +42,7 @@ public class Users implements Serializable {
     @Size(max = 255)
     @Column(name = "password")
     private String password;
-    
+   
     public Users() {
     }
 
@@ -67,6 +67,7 @@ public class Users implements Serializable {
         
         
     }
+
 
    
     @Override

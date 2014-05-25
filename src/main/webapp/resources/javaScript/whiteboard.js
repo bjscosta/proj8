@@ -102,6 +102,11 @@ function clearCanvas(){
 
 function showEditing(message) {
     var editing = document.getElementById("ed");
+        if(message === 0){
+        clearCanvas();
+        //alert("No users editing! A new Whiteboard will be launched.");
+        
+    }
     
     editing.innerHTML = message;
     

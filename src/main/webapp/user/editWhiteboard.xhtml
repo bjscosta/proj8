@@ -68,9 +68,9 @@
                                 <p:selectOneRadio id="options" value="#{whiteboardController.abort}">
 
                                     <f:selectItem itemLabel="Edit"  itemValue="false" />
-                                    <f:selectItem itemLabel="Abort" itemValue="true" />
+                                    <f:selectItem itemLabel="Abort" itemValue="true"  />
 
-                                    <p:ajax event="valueChange" process="@form" update=":inputForm"/>
+                                    <p:ajax listener="#{whiteboardController.changeEditAbort()}" event="valueChange" process="@form" update=":inputForm"/>
 
 
                                 </p:selectOneRadio>

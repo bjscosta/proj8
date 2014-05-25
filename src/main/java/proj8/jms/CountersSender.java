@@ -7,6 +7,7 @@
 package proj8.jms;
 
 import javax.annotation.Resource;
+import javax.ejb.Stateless;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.Topic;
@@ -16,6 +17,7 @@ import proj8.pojos.Counters;
  *
  * @author brunocosta
  */
+@Stateless
 public class CountersSender {
     
     @Resource (lookup = "jms/connFactory")
@@ -24,11 +26,13 @@ public class CountersSender {
     @Resource(lookup = "jms/usersLoggedTopic")
     private  Topic topic;
     
+    
     public void sendMessage(Counters c) {
         
         try (JMSContext context = connectionFactory.createContext();) {
             
             context.createProducer().send(topic, c);
+                    
 
         }
        

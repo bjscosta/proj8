@@ -8,7 +8,11 @@ package proj8.controllers;
 
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import proj8.entities.Users;
+import proj8.facades.UsersFacade;
+import proj8.webSocket.MyWhiteboard;
 
 /**
  *
@@ -17,8 +21,14 @@ import javax.inject.Named;
 @Named
 @SessionScoped
 public class WhiteboardController implements Serializable {
-    
+
     private boolean abort;
+
+    @Inject
+    private MyWhiteboard mwb;
+
+    @Inject
+    private UsersFacade userFacade;
 
     public boolean isAbort() {
         return abort;
@@ -27,7 +37,20 @@ public class WhiteboardController implements Serializable {
     public void setAbort(boolean abort) {
         this.abort = abort;
     }
-    
-    
-    
+
+    public void changeEditAbort() {
+        Users loggedUser = userFacade.getLoggedUser();
+        if (abort) {
+            mwb.getCounters().getEditingUsers().remove(loggedUser);
+            
+            mwb.getCounters().getAbortingUsers().add(loggedUser);
+        } else {
+            mwb.getCounters().getEditingUsers().add(loggedUser);
+            mwb.getCounters().getAbortingUsers().remove(loggedUser);
+        }
+
+        mwb.recieveChanges();
+
+    }
+
 }

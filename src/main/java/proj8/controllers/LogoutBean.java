@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LogoutBean {
     
     
+    
     public String logout(){
         String destination = "/index?faces-redirect=true";
         

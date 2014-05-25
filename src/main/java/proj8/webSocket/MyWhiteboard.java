@@ -13,12 +13,15 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.JMSException;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import proj8.facades.UsersFacade;
+import proj8.jms.CountersSender;
 import proj8.jms.ImageSender;
 import proj8.pojos.Counters;
 import proj8.pojos.Figure;
@@ -35,7 +38,7 @@ public class MyWhiteboard {
 
     private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
     private static ByteBuffer bb = ByteBuffer.allocate(1000000);
-    private Counters counters = new Counters();
+    private static Counters counters = new Counters();
 
     public Counters getCounters() {
         return counters;
@@ -44,19 +47,26 @@ public class MyWhiteboard {
     public void setCounters(Counters counters) {
         this.counters = counters;
     }
+    
 
     @Inject
     private ImageSender imageSender;
+    
+    @Inject
+    private CountersSender counterSender;
+
+    @Inject
+    private UsersFacade usersFacade;
 
     @OnMessage
     public void broadcastFigure(Figure figure, Session session) throws IOException, EncodeException {
 
-        for (Session peer : peers) {
-            if (!peer.equals(session)) {
-                peer.getBasicRemote().sendObject(figure);
-            }
-
-        }
+//        for (Session peer : peers) {
+//            if (!peer.equals(session)) {
+//                peer.getBasicRemote().sendObject(figure);
+//            }
+//
+//        }
     }
 
     @OnMessage
@@ -65,6 +75,8 @@ public class MyWhiteboard {
         bb = data;
 
         imageSender.sendMessage(data);
+        counterSender.sendMessage(counters);
+        
 
         for (Session peer : peers) {
             if (!peer.equals(session)) {
@@ -80,31 +92,53 @@ public class MyWhiteboard {
 
         peers.add(peer);
 
-        for (Session p : peers) {
-            p.getBasicRemote().sendText("{\"editing\" : " + 2 + "}");
-            p.getBasicRemote().sendText("{\"aborting\" : " + 1 + "}");
+        peer.getBasicRemote().sendBinary(bb);
+
+        if (peer.getUserPrincipal() != null) {
+
+
+            counters.getEditingUsers().add(usersFacade.find(peer.getUserPrincipal().getName()));
+           counterSender.sendMessage(counters);
+
         }
         
-        peer.getBasicRemote().sendBinary(bb);
 
     }
 
     @OnClose
     public void onClose(Session peer) {
-
-        //peers.remove(peer);
+        if (peer.getUserPrincipal() != null) {
+            counters.getEditingUsers().remove(usersFacade.find(peer.getUserPrincipal().getName()));
+        }
+        peers.remove(peer);
     }
 
     public void sendImage(ByteBuffer data) throws IOException {
 
         for (Session peer : peers) {
-            
+
             peer.getBasicRemote().sendBinary(data);
-            
 
         }
 
     }
-
+    
+    public void updateCounters(Counters c) throws IOException, JMSException{
+        
+        counters = c;
+        
+        for (Session p : peers) {
+            p.getBasicRemote().sendText("{\"editing\" : " + c.getEditingUsers().size() + "}");
+            p.getBasicRemote().sendText("{\"aborting\" : " + c.getAbortingUsers().size() + "}");
+        }
+        
+        
+    }
+    
+    public void recieveChanges(){
+        
+        
+        counterSender.sendMessage(counters);
+    }
 
 }

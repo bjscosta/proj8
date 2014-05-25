@@ -6,11 +6,16 @@
 
 package proj8.jms;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import proj8.pojos.Counters;
 import proj8.webSocket.MyWhiteboard;
 
 /**
@@ -33,7 +38,13 @@ public class CountersReciever implements MessageListener {
     @Override
     public void onMessage(Message message) {
         
-        
+        try {
+            mw.updateCounters(message.getBody(Counters.class));
+        } catch (IOException ex) {
+            Logger.getLogger(CountersReciever.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JMSException ex) {
+            Logger.getLogger(CountersReciever.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
        
         

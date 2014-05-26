@@ -53,10 +53,8 @@ public class ImageReciever implements MessageListener {
         } catch (IOException ex) {
             Logger.getLogger(ImageReciever.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-       
-        
-        
+   
     }
+    
     
 }

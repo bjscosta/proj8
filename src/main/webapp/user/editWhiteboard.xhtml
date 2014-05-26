@@ -133,11 +133,12 @@
         </h:form>
 
         <div align="center">
+            <h:form>
+                Insert Name: <input id="name"></input>
+                <p:commandButton value="Save" onclick="saveImage();"
+                                 action="#{whiteboardController.updateList()}"/>
 
-            <input type="submit" value="Save" onclick="defineImageBinary();
-                    return false;"/>
-
-
+            </h:form>
 
         </div>
 

@@ -6,9 +6,13 @@
 
 package proj8.facades;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import proj8.entities.Users;
 import proj8.entities.Whiteboard;
 
 /**
@@ -27,6 +31,21 @@ public class WhiteboardFacade extends AbstractFacade<Whiteboard> {
 
     public WhiteboardFacade() {
         super(Whiteboard.class);
+    }
+    
+    public List<Whiteboard> WhiteboardFindByUser(Users user) {
+
+        TypedQuery<Whiteboard> query = em.createNamedQuery(Whiteboard.WHITEBOARD_FIND_BY_USERNAME, Whiteboard.class);
+
+        query.setParameter("username", user.getUsername());
+
+        List<Whiteboard> quotation = new ArrayList<>();
+
+        
+            quotation.addAll(query.getResultList());
+        
+
+        return quotation;
     }
     
 }

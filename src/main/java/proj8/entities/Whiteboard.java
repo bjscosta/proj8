@@ -7,7 +7,6 @@
 package proj8.entities;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,7 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
@@ -26,20 +26,23 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "witeboard")
+@NamedQueries({
+    @NamedQuery(name = Whiteboard.WHITEBOARD_FIND_BY_USERNAME, 
+            query = "SELECT u FROM Whiteboard u WHERE u.username = :username")
+})
+
 public class Whiteboard implements Serializable {
-    
+
+    public static final String WHITEBOARD_FIND_BY_USERNAME = "Whiteboard.findByUser";
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
     
-    @Basic(optional = false)
+    
     @NotNull
     @Column(name = "user")
-    
-    
-    @ManyToOne
-    private Users user;
+    private String username;
     
     @NotNull
     @Column(name = "name", nullable = false)
@@ -49,7 +52,7 @@ public class Whiteboard implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "figure", nullable = false)
-    private Blob image;
+    private byte[] image;
     
     
     @NotNull
@@ -64,21 +67,25 @@ public class Whiteboard implements Serializable {
         this.id = id;
     }
 
-    public Users getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(Users user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Blob getImage() {
+    
+
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
+
+    
 
     public String getName() {
         return name;
@@ -88,10 +95,7 @@ public class Whiteboard implements Serializable {
         this.name = name;
     }
 
-    
-
-    
-
+   
     public Date getSaveDate() {
         return saveDate;
     }

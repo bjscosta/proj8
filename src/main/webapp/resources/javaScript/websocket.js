@@ -44,6 +44,12 @@ function onMessage(evt) {
         else if(json.hasOwnProperty('aborting')){
             showAborting(json.aborting);
         }
+        
+        else if(json.hasOwnProperty('abort')){
+            if(json.abort === true){
+                clearCanvas();
+            }
+        }
 
         else{
         drawImageText(evt.data);

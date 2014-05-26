@@ -6,6 +6,7 @@
 
 package proj8.pojos;
 
+import java.io.Serializable;
 import java.io.StringWriter;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -14,9 +15,11 @@ import javax.json.JsonObject;
  *
  * @author brunocosta
  */
-public class Figure {
+public class Figure implements Serializable {
     
     private JsonObject json;
+
+   
 
     public JsonObject getJson() {
         return json;

@@ -43,7 +43,7 @@ function defineImage(evt) {
     });
     drawImageText(json);
         
-    sendText(json);
+    
     
     defineImageBinary();
     
@@ -68,7 +68,7 @@ function drawImageText(image) {
 
 function drawImageBinary(blob) {
     var bytes = new Uint8Array(blob);
-//    console.log('drawImageBinary (bytes.length): ' + bytes.length);
+
     
     var imageData = context.createImageData(canvas.width, canvas.height);
     
@@ -93,6 +93,10 @@ function defineImageBinary() {
     sendBinary(buffer);
 }
 
+function saveImage(){
+    sendText(document.getElementById("name").value);
+}
+
 function clearCanvas(){
     
     context.clearRect(0,0,canvas.width,canvas.height);
@@ -102,11 +106,8 @@ function clearCanvas(){
 
 function showEditing(message) {
     var editing = document.getElementById("ed");
-        if(message === 0){
-        clearCanvas();
-        //alert("No users editing! A new Whiteboard will be launched.");
         
-    }
+    
     
     editing.innerHTML = message;
     
@@ -118,3 +119,8 @@ function showAborting(message) {
     aborting.innerHTML = message;
     
 }
+
+window.onbeforeunload = function(event) {
+
+    
+};

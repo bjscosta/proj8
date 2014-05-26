@@ -41,12 +41,10 @@ public class FigureDecoder implements Decoder.Text<Figure> {
 
     @Override
     public void init(EndpointConfig config) {
-        System.out.println("init");
     }
 
     @Override
     public void destroy() {
-        System.out.println("destroy");
     }
     
 }

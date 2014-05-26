@@ -98,7 +98,7 @@ public class MyWhiteboard {
 
 
             counters.getEditingUsers().add(usersFacade.find(peer.getUserPrincipal().getName()));
-           counterSender.sendMessage(counters);
+            counterSender.sendMessage(counters);
 
         }
         

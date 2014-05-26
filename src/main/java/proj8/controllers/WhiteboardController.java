@@ -42,8 +42,16 @@ public class WhiteboardController implements Serializable {
         Users loggedUser = userFacade.getLoggedUser();
         if (abort) {
             mwb.getCounters().getEditingUsers().remove(loggedUser);
+            if (mwb.getCounters().getEditingUsers().isEmpty()) {
+//                mwb.getCounters().setEditingUsers(mwb.getCounters().getAbortingUsers());
+//                mwb.getCounters().setAbortingUsers(new ArrayList<Users>());
+//                abort = false;
+                
+                
+            }
+            else{
+            mwb.getCounters().getAbortingUsers().add(loggedUser);}
             
-            mwb.getCounters().getAbortingUsers().add(loggedUser);
         } else {
             mwb.getCounters().getEditingUsers().add(loggedUser);
             mwb.getCounters().getAbortingUsers().remove(loggedUser);

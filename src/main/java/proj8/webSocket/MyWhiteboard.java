@@ -25,7 +25,6 @@ import proj8.entities.Whiteboard;
 import proj8.facades.UsersFacade;
 import proj8.facades.WhiteboardFacade;
 import proj8.jms.CountersSender;
-import proj8.jms.ImageReciever;
 import proj8.jms.ImageSender;
 import proj8.pojos.Counters;
 import proj8.tools.FigureDecoder;
@@ -53,9 +52,6 @@ public class MyWhiteboard {
 
     @Inject
     private ImageSender imageSender;
-    
-    @Inject
-    private ImageReciever imageReciever;
 
     @Inject
     private CountersSender counterSender;

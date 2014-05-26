@@ -6,12 +6,20 @@
 
 package proj8.controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import proj8.entities.Users;
 import proj8.entities.Whiteboard;
 import proj8.facades.UsersFacade;
@@ -31,6 +39,7 @@ public class WhiteboardController implements Serializable {
     private WhiteboardDataModel whiteModel;
     private List<Whiteboard> whiteList;
     private Whiteboard selectedW;
+    private StreamedContent finalImage;
 
     @Inject
     private MyWhiteboard mwb;
@@ -72,6 +81,14 @@ public class WhiteboardController implements Serializable {
     public void setSelectedW(Whiteboard selectedW) {
         this.selectedW = selectedW;
     }
+
+    public StreamedContent getFinalImage() {
+        return finalImage;
+    }
+
+    public void setFinalImage(StreamedContent finalImage) {
+        this.finalImage = finalImage;
+    }
     
     
     
@@ -80,6 +97,8 @@ public class WhiteboardController implements Serializable {
     public void init(){
         whiteList = wFacade.WhiteboardFindByUser(userFacade.getLoggedUser());
         whiteModel = new WhiteboardDataModel(whiteList);
+        selectedW = new Whiteboard();
+        finalImage = new DefaultStreamedContent();
     }
 
     public void changeEditAbort() {
@@ -101,6 +120,22 @@ public class WhiteboardController implements Serializable {
     public void updateList(){
         whiteList = wFacade.WhiteboardFindByUser(userFacade.getLoggedUser());
         System.out.println(whiteList.size());
+    }
+   
+    
+    public void makeImage(Whiteboard w) throws IOException{
+        
+        
+        selectedW = wFacade.find(w.getId());
+        
+        byte[] imageData = selectedW.getImage();
+        BufferedImage img = new BufferedImage(600, 300, BufferedImage.TYPE_4BYTE_ABGR);
+        img.getRaster().setDataElements(0, 0, 600, 300, imageData);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(img, "png", os);
+        InputStream is = new ByteArrayInputStream(os.toByteArray());
+        StreamedContent image = new DefaultStreamedContent(is, "image/png");
+        finalImage = image;
     }
 
 }

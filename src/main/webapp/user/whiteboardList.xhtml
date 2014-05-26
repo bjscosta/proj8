@@ -45,38 +45,40 @@
 
         </h:form>
 
-        <p:dataTable id="whiteboardList" var="whiteboard" value="#{whiteboardController.whiteList}"
-                     paginator="true" rows="10" paginatorPosition="bottom"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15" sortBy="name">
+        <h:form id="wList">
+
+            <p:dataTable id="whiteboardList" var="whiteboard" value="#{whiteboardController.whiteList}"
+                         rowKey="#{whiteboard.id}"
+                         selection="#{whiteboardController.selectedW}"
+                         paginator="true" rows="10" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15" sortBy="name">
 
 
 
-            <p:column headerText="Nome" sortBy="name">
-                #{whiteboard.name}
-            </p:column>
+                <p:column headerText="Nome" sortBy="name">
+                    #{whiteboard.name}
+                </p:column>
 
-            <p:column headerText="Data" sortBy="saveDate">
-                #{whiteboard.saveDate}
-            </p:column>
+                <p:column headerText="Data" sortBy="saveDate">
+                    #{whiteboard.saveDate}
+                </p:column>
 
-            <p:column>
-                <h:form>
-                    <p:commandButton oncomplete="PF('wb').show()" icon="ui-icon-search" title="View">
-                        <f:setPropertyActionListener value="#{whiteboard}" target="#{whiteboardController.selectedW}" />
-                    </p:commandButton>
-                </h:form>
-            </p:column>
+                <p:column>
+                    <p:commandButton actionListener="#{whiteboardController.makeImage(whiteboard)}" id="viewWButton" icon="ui-icon-search" immediate="false"
+                                     oncomplete="PF('wb').show()" update=":wList:dialogForm" />
+                </p:column>
+
+
+            </p:dataTable>
 
             <h:form id="dialogForm">
                 <p:dialog widgetVar="wb" header="#{whiteboardController.selectedW.name}" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="600" height="300">
-
+                    <p:graphicImage  value="#{whiteboardController.finalImage}"/>
                 </p:dialog>
             </h:form>
 
-
-        </p:dataTable>
-
+        </h:form>
         <br/>
         <br/>
 

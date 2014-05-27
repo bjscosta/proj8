@@ -8,30 +8,49 @@
     <h:head>
         <title>Edit Whiteboard</title>
     </h:head>
-    <h:body style="background-color: lightgrey">
+    <h:body style="background-image: url('../resources/images/good-desktop.jpg')">
 
         <h:form>
-
-            <table border="0" cellspacing="10" width="100%">
+            <p:growl id="message" showDetail="true" />
+            <table style="background-color: white" border="0" cellspacing="10" width="100%">
 
                 <tbody>
                     <tr>
-                        <td width="10%" align="left">
-                            <h:link style="color: black" outcome="/index" value="Back" />
+                        <td width="10%" align="center">
+                            <h:link style="color: black" outcome="/index" title="Home">
+
+                                <img src="../resources/images/home.png" width="32" height="32" alt="home"/>
+
+                            </h:link>
                         </td>
-                        <td width="20%" align="left">
-                            <h:link style="color: black" outcome="editWhiteboard" value="Edit Whiteboard" />
-                        </td>
-                        <td width="25%" align="left">
-                            <h:link style="color: black" outcome="whiteboardList" value="See My Saved Whiteboards" />
-                        </td>
-                        <td width="25%" align="right">
-                            <h:outputLabel style="color: black" rendered="#{userController.seeIfLogged()}" value="Welcome: #{userController.userName()}"/>
+                        <td width="10%" align="center">
+                            <h:link style="color: black" outcome="editWhiteboard" title="Edit Whiteboard">
+                                <img src="../resources/images/edit.png" width="32" height="32" alt="edit"/>
+
+
+                            </h:link>
 
                         </td>
-                        <td width="20%" align="right">
+                        <td width="10%" align="center">
+                            <h:link style="color: black" outcome="whiteboardList" title="See My Saved Whiteboards" >
+                                <img src="../resources/images/list.png" width="32" height="32" alt="list"/>
 
-                            <h:commandLink style="color: black" rendered="#{userController.seeIfLogged()}" action="#{logoutBean.logout()}" value="Logout" />
+
+                            </h:link>
+
+                        </td>
+                        <td width="60%" align="right">
+                            <h3><h:outputLabel style="color: black" rendered="#{userController.seeIfLogged()}" value="Welcome: #{userController.userName()}"/></h3>
+
+                        </td>
+                        <td width="10%" align="center">
+
+                            <h:commandLink style="color: black" rendered="#{userController.seeIfLogged()}" action="#{logoutBean.logout()}" title="Logout" >
+
+                                <img src="../resources/images/Off.png" width="32" height="32" alt="Off"/>
+
+
+                            </h:commandLink>
                         </td>
                     </tr>
                 </tbody>
@@ -40,7 +59,7 @@
             <br/>
 
             <div align="center">
-                <h1>
+                <h1 style="color: white">
                     Edit Whiteboard
                 </h1>
             </div>
@@ -50,30 +69,30 @@
 
         </h:form>
 
-        <h:form>
+        <h:form id="controler">
             <div align="center">
                 <table border="0" cellspacing="5" width="60%">
 
                     <tbody>
                         <tr>
-                            <td align="left">
+                            <td style="color: white" align="left">
                                 Users Editing: &nbsp;<span id="ed"></span>
                             </td>
 
-                            <td align="right" >
+                            <td style="color: white" align="right" >
                                 Users Aborting:&nbsp; <span id="ab"></span>
                             </td>
                             <td align="right">
 
-                                <p:selectOneRadio id="options" value="#{whiteboardController.abort}">
+                                <h:selectOneRadio onchange="seeAbort(this.value)" style="color: white" id="options" value="#{whiteboardController.abort}">
 
                                     <f:selectItem itemLabel="Edit"  itemValue="false" />
                                     <f:selectItem itemLabel="Abort" itemValue="true"  />
 
-                                    <p:ajax listener="#{whiteboardController.changeEditAbort()}" event="valueChange" process="@form" update=":inputForm"/>
 
 
-                                </p:selectOneRadio>
+
+                                </h:selectOneRadio>
 
                             </td>
                         </tr>
@@ -103,22 +122,20 @@
                     <table cellspacing="5" width="60%">
 
                         <tr>
-                            <th>Color:</th>
-                            <td><input type="radio" name="color" value="#FF0000" checked="true"/>Red</td>
-                            <td><input type="radio" name="color" value="#0000FF"/>Blue</td>
-                            <td><input type="radio" name="color" value="#FF9900"/>Orange</td>
-                            <td><input type="radio" name="color" value="#33CC33"/>Green</td>
+                            <th style="color: white">Color:</th>
+                            <td>
+                                <input type="color" id="color"/>
+
+                            </td>
+                            <td></td>
                         </tr>
 
                         <br/>
                         <tr>
-                            <th>Shape:</th>
-                            <td><input type="radio" name="shape" value="square" checked="true"/>Square</td>
-                            <td><input type="radio" name="shape" value="circle"/>Circle</td>
+                            <th style="color: white">Shape:</th>
+                            <td style="color: white"><input type="radio" name="shape" value="square" checked="true"/>Square</td>
+                            <td style="color: white"><input type="radio" name="shape" value="circle"/>Circle</td>
 
-                            <td>
-                            </td>
-                            <td> </td>
                         </tr>
 
 
@@ -134,9 +151,21 @@
 
         <div align="center">
             <h:form>
-                Insert Name: <input id="name"></input>
-                <p:commandButton value="Save" onclick="saveImage();"
-                                 action="#{whiteboardController.updateList()}"/>
+                <div align="center">
+
+                    <p:commandButton value="Save" actionListener="#{whiteboardController.saveImage()}" oncomplete="dlg.show();"/>
+
+                </div>
+
+                <p:dialog id="dlg" header="Image Name" widgetVar="dlg" modal="true" dynamic="true">
+
+                    <p:inputText id="username" required="true" label="username" size="40" value="#{whiteboardController.imageName}" />
+                    <br/>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="OK" action="#{whiteboardController.finalSaveImage()}" ajax="false" oncomplete="dlg.hide();" />
+                    </div>
+                </p:dialog>
 
             </h:form>
 

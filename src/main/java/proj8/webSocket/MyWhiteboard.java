@@ -9,7 +9,6 @@ package proj8.webSocket;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ejb.Stateless;
@@ -21,21 +20,17 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import proj8.entities.Whiteboard;
 import proj8.facades.UsersFacade;
-import proj8.facades.WhiteboardFacade;
 import proj8.jms.CountersSender;
 import proj8.jms.ImageSender;
 import proj8.pojos.Counters;
-import proj8.tools.FigureDecoder;
-import proj8.tools.FigureEncoder;
 
 /**
  *
  * @author brunocosta
  */
 @Stateless
-@ServerEndpoint(value = "/whiteboardendpoint", encoders = {FigureEncoder.class}, decoders = {FigureDecoder.class})
+@ServerEndpoint(value = "/whiteboardendpoint")
 public class MyWhiteboard {
 
     private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
@@ -50,6 +45,14 @@ public class MyWhiteboard {
         this.counters = counters;
     }
 
+    public ByteBuffer getBb() {
+        return bb;
+    }
+
+    public void setBb(ByteBuffer bb) {
+        this.bb = bb;
+    }
+
     @Inject
     private ImageSender imageSender;
 
@@ -59,24 +62,30 @@ public class MyWhiteboard {
     @Inject
     private UsersFacade usersFacade;
     
-    @Inject
-    private WhiteboardFacade whiteboardFacade; 
-    
     
     @OnMessage
-    public void broadcastFigure(String name, Session session) throws IOException, EncodeException {
-        
-        
-                Whiteboard w = new Whiteboard();
-        
-                w.setImage(bb.array());         
-                w.setSaveDate(new Date());
-                w.setName(name);
-                w.setUsername(session.getUserPrincipal().toString());
+    public void counter(String data, Session session) throws IOException {
+
+        switch (data){
+            case "edit":
+                if(counters.getAbortingUsers().contains(usersFacade.find(session.getUserPrincipal().getName()))){
+                    counters.getEditingUsers().add(usersFacade.find(session.getUserPrincipal().getName()));
+                    counters.getAbortingUsers().remove(usersFacade.find(session.getUserPrincipal().getName()));
+                }
+            break;
                 
-                whiteboardFacade.create(w);
+                case "abort":
+                if(counters.getEditingUsers().contains(usersFacade.find(session.getUserPrincipal().getName()))){
+                    counters.getAbortingUsers().add(usersFacade.find(session.getUserPrincipal().getName()));
+                    counters.getEditingUsers().remove(usersFacade.find(session.getUserPrincipal().getName()));
+                }
+            break;
                 
-     
+                
+        }
+        
+        counterSender.sendMessage(counters);
+
     }
 
     @OnMessage
@@ -87,14 +96,6 @@ public class MyWhiteboard {
         imageSender.sendMessage(data);
         counterSender.sendMessage(counters);
 
-//        for (Session peer : peers) {
-//            if (!peer.equals(session)) {
-//                peer.getBasicRemote().sendBinary(data);
-//            }
-//
-//        }
-        
-        
     }
 
     @OnOpen
@@ -107,10 +108,10 @@ public class MyWhiteboard {
         if (peer.getUserPrincipal() != null) {
 
             counters.getEditingUsers().add(usersFacade.find(peer.getUserPrincipal().getName()));
-            counterSender.sendMessage(counters);
-            
+
         }
-        
+        counterSender.sendMessage(counters);
+
     }
 
     @OnClose
@@ -122,10 +123,9 @@ public class MyWhiteboard {
     }
 
     public void sendImage(ByteBuffer data) throws IOException {
-        
-        
+
         bb = data;
-        
+
         for (Session peer : peers) {
 
             peer.getBasicRemote().sendBinary(bb);
@@ -152,10 +152,4 @@ public class MyWhiteboard {
 
     }
 
-    public void recieveChanges() {
-
-        counterSender.sendMessage(counters);
-    }
-
-   
 }

@@ -5,30 +5,47 @@
     <h:head>
         <title>Active Whiteboard</title>
     </h:head>
-    <h:body style="background-color: lightgrey">
+    <h:body style="background-image: url('resources/images/good-desktop.jpg')">
 
         <h:form>
 
-            <table border="0" cellspacing="10" width="100%">
+            <table style="background-color: white" border="0" cellspacing="10" width="100%">
 
                 <tbody>
                     <tr>
-                        <td width="10%" align="left">
-                            <h:link style="color: black" rendered="#{!userController.seeIfLogged()}" outcome="login" value="Login" />
+                        <td width="10%" align="center">
+                            <h:link style="color: black" rendered="#{!userController.seeIfLogged()}" outcome="login" title="Login">
+
+                                <img src="resources/images/login.png" width="32" height="32" alt="Login_in"/>
+
+
+                            </h:link>
                         </td>
-                        <td width="20%" align="left">
-                            <h:link style="color: black" outcome="user/editWhiteboard" value="Edit Whiteboard" />
+                        <td width="10%" align="center">
+                            <h:link style="color: black" outcome="user/editWhiteboard" title="Edit Whiteboard">
+                                <img src="resources/images/edit.png" width="32" height="32" alt="edit"/>
+
+
+                            </h:link>
                         </td>
-                        <td width="25%" align="left">
-                            <h:link style="color: black" outcome="user/whiteboardList" value="See My Saved Whiteboards" />
+                        <td width="10%" align="center">
+                            <h:link style="color: black" outcome="user/whiteboardList" title="See My Saved Whiteboards" >
+                                <img src="resources/images/list.png" width="32" height="32" alt="list"/>
+
+
+                            </h:link>
                         </td>
-                        <td width="25%" align="right">
-                            <h:outputLabel rendered="#{userController.seeIfLogged()}" value="Welcome: #{userController.userName()}"/>
+                        <td width="60%" align="center">
+                            <h3><h:outputLabel rendered="#{userController.seeIfLogged()}" value="#{userController.userName()}"/></h3>
 
                         </td>
-                        <td width="20%" align="right">
+                        <td width="10%" align="right">
 
-                            <h:commandLink style="color: black" rendered="#{userController.seeIfLogged()}" action="#{logoutBean.logout()}" value="Logout" />
+                            <h:commandLink style="color: black" rendered="#{userController.seeIfLogged()}" action="#{logoutBean.logout()}" title="Logout">
+                                <img src="resources/images/Off.png" width="32" height="32" alt="Off"/>
+
+
+                            </h:commandLink>
                         </td>
                     </tr>
                 </tbody>
@@ -38,7 +55,7 @@
 
         <br/>
         <div align="center">
-            <h1>
+            <h1 style="color: white">
                 Whiteboard
             </h1>
         </div>

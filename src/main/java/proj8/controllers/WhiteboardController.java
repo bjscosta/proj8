@@ -12,15 +12,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import proj8.entities.Users;
 import proj8.entities.Whiteboard;
 import proj8.facades.UsersFacade;
 import proj8.facades.WhiteboardFacade;
@@ -39,6 +41,8 @@ public class WhiteboardController implements Serializable {
     private Whiteboard selectedW;
     private StreamedContent finalImage;
     private boolean haveW;
+    private byte[] imagData;
+    private String imageName;
 
     @Inject
     private MyWhiteboard mwb;
@@ -55,6 +59,7 @@ public class WhiteboardController implements Serializable {
         whiteList = wFacade.WhiteboardFindByUser(userFacade.LoggedUser());
         selectedW = new Whiteboard();
         finalImage = new DefaultStreamedContent();
+        
     }
 
     public boolean isAbort() {
@@ -95,28 +100,23 @@ public class WhiteboardController implements Serializable {
     public boolean isHaveW() {
         return haveW;
     }
-    
-    
-    
-    
-    
 
-    public void changeEditAbort() {
-        Users loggedUser = userFacade.LoggedUser();
-        if (abort) {
-            mwb.getCounters().getAbortingUsers().add(loggedUser);
-            mwb.getCounters().getEditingUsers().remove(loggedUser);
-
-            
-        } else {
-            mwb.getCounters().getEditingUsers().add(loggedUser);
-            mwb.getCounters().getAbortingUsers().remove(loggedUser);
-        }
-
-        mwb.recieveChanges();
-
+    public byte[] getImagData() {
+        return imagData;
     }
-    
+
+    public void setImagData(byte[] imagData) {
+        this.imagData = imagData;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
     public void updateList(){
         whiteList = wFacade.WhiteboardFindByUser(userFacade.LoggedUser());
     }
@@ -136,12 +136,38 @@ public class WhiteboardController implements Serializable {
     }
     
     
-    public void deleteWhiteboard(Long wId){
+    public void deleteWhiteboard(){
         
-        wFacade.remove(wFacade.find(wId));
+        wFacade.remove(wFacade.find(selectedW.getId()));
         whiteList = wFacade.WhiteboardFindByUser(userFacade.LoggedUser());
-                
+ 
+    }
+    
+    public String goToTable(){
+        return "whiteboardList";
+    }
+    
+    
+    public void saveImage() {
+
+        imagData = mwb.getBb().array();
+
+    }
+
+    public void finalSaveImage() {
+
+        Whiteboard wb = new Whiteboard();
+
         
+        wb.setImage(imagData); 
+        wb.setName(imageName);
+        wb.setSaveDate(new Date());
+        wb.setUsername(userFacade.LoggedUser().getUsername());
+
+        wFacade.create(wb);
+        
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, "Image Saved", "Info"));
     }
 
 }

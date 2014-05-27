@@ -10,7 +10,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import proj8.facades.UsersFacade;
-import proj8.webSocket.MyWhiteboard;
 
 /**
  *
@@ -23,12 +22,6 @@ public class UserController {
     @Inject
     private UsersFacade uf;
 
-    @Inject
-    private MyWhiteboard mwb;
-    
-    
-
-
     public String userName() {
         if (uf.LoggedUser() != null) {
 
@@ -39,8 +32,6 @@ public class UserController {
             return "";
         }
     }
-    
-    
 
     public boolean seeIfLogged() {
         if (uf.LoggedUser() == null) {

@@ -19,12 +19,7 @@ function getCurrentPos(evt) {
 function defineImage(evt) {
     var currentPos = getCurrentPos(evt);
     
-    for (i = 0; i < document.inputForm.color.length; i++) {
-        if (document.inputForm.color[i].checked) {
-            var color = document.inputForm.color[i];
-            break;
-        }
-    }
+    var color = document.getElementById("color"); 
             
     for (i = 0; i < document.inputForm.shape.length; i++) {
         if (document.inputForm.shape[i].checked) {
@@ -93,14 +88,25 @@ function defineImageBinary() {
     sendBinary(buffer);
 }
 
-function saveImage(){
-    sendText(document.getElementById("name").value);
-}
 
 function clearCanvas(){
     
     context.clearRect(0,0,canvas.width,canvas.height);
     defineImageBinary();
+        document.getElementById("controler:options:0").click();
+        sendText("edit");
+    
+}
+
+function seeAbort(message){
+    
+    if (message === false){
+        sendText("edit");
+    }
+    
+    else{
+        sendText("abort");
+    }
     
 }
 

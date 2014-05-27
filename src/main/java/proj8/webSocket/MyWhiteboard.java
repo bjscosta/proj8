@@ -87,12 +87,12 @@ public class MyWhiteboard {
         imageSender.sendMessage(data);
         counterSender.sendMessage(counters);
 
-        for (Session peer : peers) {
-            if (!peer.equals(session)) {
-                peer.getBasicRemote().sendBinary(data);
-            }
-
-        }
+//        for (Session peer : peers) {
+//            if (!peer.equals(session)) {
+//                peer.getBasicRemote().sendBinary(data);
+//            }
+//
+//        }
         
         
     }

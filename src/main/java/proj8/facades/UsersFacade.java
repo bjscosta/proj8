@@ -37,7 +37,7 @@ public class UsersFacade extends AbstractFacade<Users> {
         super(Users.class);
     }
     
-    public Users getLoggedUser(){
+    public Users LoggedUser(){
         
         Users u = null;
         

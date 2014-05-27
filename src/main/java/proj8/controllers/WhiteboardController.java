@@ -24,7 +24,6 @@ import proj8.entities.Users;
 import proj8.entities.Whiteboard;
 import proj8.facades.UsersFacade;
 import proj8.facades.WhiteboardFacade;
-import proj8.tools.WhiteboardDataModel;
 import proj8.webSocket.MyWhiteboard;
 
 /**
@@ -36,10 +35,10 @@ import proj8.webSocket.MyWhiteboard;
 public class WhiteboardController implements Serializable {
 
     private boolean abort;
-    private WhiteboardDataModel whiteModel;
     private List<Whiteboard> whiteList;
     private Whiteboard selectedW;
     private StreamedContent finalImage;
+    private boolean haveW;
 
     @Inject
     private MyWhiteboard mwb;
@@ -49,6 +48,14 @@ public class WhiteboardController implements Serializable {
     
     @Inject
     private WhiteboardFacade wFacade;
+    
+    
+    @PostConstruct
+    public void init(){
+        whiteList = wFacade.WhiteboardFindByUser(userFacade.LoggedUser());
+        selectedW = new Whiteboard();
+        finalImage = new DefaultStreamedContent();
+    }
 
     public boolean isAbort() {
         return abort;
@@ -58,15 +65,9 @@ public class WhiteboardController implements Serializable {
         this.abort = abort;
     }
 
-    public WhiteboardDataModel getWhiteModel() {
-        return whiteModel;
-    }
-
-    public void setWhiteModel(WhiteboardDataModel wModel) {
-        this.whiteModel = wModel;
-    }
 
     public List<Whiteboard> getWhiteList() {
+        whiteList = wFacade.WhiteboardFindByUser(userFacade.LoggedUser());
         return whiteList;
     }
 
@@ -79,6 +80,7 @@ public class WhiteboardController implements Serializable {
     }
 
     public void setSelectedW(Whiteboard selectedW) {
+        
         this.selectedW = selectedW;
     }
 
@@ -89,20 +91,18 @@ public class WhiteboardController implements Serializable {
     public void setFinalImage(StreamedContent finalImage) {
         this.finalImage = finalImage;
     }
-    
-    
-    
-    
-    @PostConstruct
-    public void init(){
-        whiteList = wFacade.WhiteboardFindByUser(userFacade.getLoggedUser());
-        whiteModel = new WhiteboardDataModel(whiteList);
-        selectedW = new Whiteboard();
-        finalImage = new DefaultStreamedContent();
+
+    public boolean isHaveW() {
+        return haveW;
     }
+    
+    
+    
+    
+    
 
     public void changeEditAbort() {
-        Users loggedUser = userFacade.getLoggedUser();
+        Users loggedUser = userFacade.LoggedUser();
         if (abort) {
             mwb.getCounters().getAbortingUsers().add(loggedUser);
             mwb.getCounters().getEditingUsers().remove(loggedUser);
@@ -118,16 +118,13 @@ public class WhiteboardController implements Serializable {
     }
     
     public void updateList(){
-        whiteList = wFacade.WhiteboardFindByUser(userFacade.getLoggedUser());
-        System.out.println(whiteList.size());
+        whiteList = wFacade.WhiteboardFindByUser(userFacade.LoggedUser());
     }
    
     
-    public void makeImage(Whiteboard w) throws IOException{
+    public void makeImage() throws IOException{
         
-        
-        selectedW = wFacade.find(w.getId());
-        
+        haveW = true;
         byte[] imageData = selectedW.getImage();
         BufferedImage img = new BufferedImage(600, 300, BufferedImage.TYPE_4BYTE_ABGR);
         img.getRaster().setDataElements(0, 0, 600, 300, imageData);
@@ -136,6 +133,15 @@ public class WhiteboardController implements Serializable {
         InputStream is = new ByteArrayInputStream(os.toByteArray());
         StreamedContent image = new DefaultStreamedContent(is, "image/png");
         finalImage = image;
+    }
+    
+    
+    public void deleteWhiteboard(Long wId){
+        
+        wFacade.remove(wFacade.find(wId));
+        whiteList = wFacade.WhiteboardFindByUser(userFacade.LoggedUser());
+                
+        
     }
 
 }

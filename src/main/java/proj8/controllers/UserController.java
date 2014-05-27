@@ -30,10 +30,10 @@ public class UserController {
 
 
     public String userName() {
-        if (uf.getLoggedUser() != null) {
+        if (uf.LoggedUser() != null) {
 
             
-            return uf.getLoggedUser().getUsername();
+            return uf.LoggedUser().getUsername();
 
         } else {
             return "";
@@ -43,7 +43,7 @@ public class UserController {
     
 
     public boolean seeIfLogged() {
-        if (uf.getLoggedUser() == null) {
+        if (uf.LoggedUser() == null) {
             return false;
         } else {
             return true;

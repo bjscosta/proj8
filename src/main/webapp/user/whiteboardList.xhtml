@@ -47,6 +47,8 @@
 
         <h:form id="wList">
 
+            <p:growl id="message" showDetail="true" />
+
             <p:dataTable id="whiteboardList" var="whiteboard" value="#{whiteboardController.whiteList}"
                          rowKey="#{whiteboard.id}"
                          selection="#{whiteboardController.selectedW}"
@@ -64,21 +66,43 @@
                     #{whiteboard.saveDate}
                 </p:column>
 
-                <p:column>
-                    <p:commandButton actionListener="#{whiteboardController.makeImage(whiteboard)}" id="viewWButton" icon="ui-icon-search" immediate="false"
-                                     oncomplete="PF('wb').show()" update=":wList:dialogForm" />
+                <p:column headerText="View">
+                    <p:commandButton action="#{whiteboardController.makeImage()}" id="viewWButton" icon="ui-icon-search" immediate="false"
+                                     oncomplete="PF('wb').show()" update=":dialogForm" >
+
+                        <f:setPropertyActionListener value="#{whiteboard}" target="#{whiteboardController.selectedW}"/>
+                    </p:commandButton>
+
+
                 </p:column>
 
+                <p:column headerText="Delete">
+                    <p:commandButton ajax="true" action="#{whiteboardController.deleteWhiteboard(whiteboard.id)}"
+                                     id="deleteButton" icon="ui-icon ui-icon-close">
+                        <p:confirm header="Delete" message="Are you sure?" icon="ui-icon-alert" />
+                    </p:commandButton>
+
+                </p:column>
 
             </p:dataTable>
 
-            <h:form id="dialogForm">
-                <p:dialog widgetVar="wb" header="#{whiteboardController.selectedW.name}" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="600" height="300">
-                    <p:graphicImage  value="#{whiteboardController.finalImage}"/>
-                </p:dialog>
-            </h:form>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                <p:commandButton update=":wList" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
         </h:form>
+
+        <h:form id="dialogForm">
+            <p:dialog rendered="#{whiteboardController.haveW}" widgetVar="wb" header="#{whiteboardController.selectedW.name}"
+                      modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="800" height="500">
+                <p:graphicImage  value="#{whiteboardController.finalImage}"/>
+            </p:dialog>
+        </h:form>
+
+
+
         <br/>
         <br/>
 

@@ -110,8 +110,8 @@
             <p:dialog modal="true" header="Are you sure?" widgetVar="conf"  showEffect="fade" hideEffect="explode">
                 <p:commandButton action="#{whiteboardController.deleteWhiteboard()}" ajax="false"
                                  update=":wList" value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
-                                 oncomplete="conf.hide();"/>
-                <p:commandButton ajax="false" value="No" oncomplete="conf.hide();" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                 />
+                <p:commandButton value="No" oncomplete="PF('conf').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:dialog>
 
         </h:form>
